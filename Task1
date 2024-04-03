@@ -1,0 +1,44 @@
+using System;
+using System.Threading;
+
+class Program
+{
+    static void Main()
+    {
+        Console.WriteLine("Введіть верхню межу діапазону для генерації простих чисел (або натисніть Enter для нескінченного діапазону): ");
+        string upperLimitInput = Console.ReadLine();
+        int upperLimit;
+
+        if (string.IsNullOrEmpty(upperLimitInput))
+            upperLimit = int.MaxValue;
+        else
+            upperLimit = int.Parse(upperLimitInput);
+
+        Thread primeThread = new Thread(() => GeneratePrimeNumbers(upperLimit));
+        primeThread.Start();
+    }
+
+    static void GeneratePrimeNumbers(int upperLimit)
+    {
+        int number = 2; 
+        while (number <= upperLimit)
+        {
+            if (IsPrime(number))
+                Console.WriteLine(number);
+            number++;
+        }
+    }
+
+    static bool IsPrime(int number)
+    {
+        if (number <= 1)
+            return false;
+
+        for (int i = 2; i <= Math.Sqrt(number); i++)
+        {
+            if (number % i == 0)
+                return false;
+        }
+        return true;
+    }
+}
