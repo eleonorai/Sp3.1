@@ -1,0 +1,62 @@
+using System;
+using System.Threading;
+
+class Program
+{
+    static void Main()
+    {
+        Console.WriteLine("Введіть верхню межу діапазону для генерації чисел Фібоначчі (або натисніть Enter для нескінченного діапазону): ");
+        string upperLimitInput = Console.ReadLine();
+        int upperLimit;
+
+        if (string.IsNullOrEmpty(upperLimitInput))
+            upperLimit = int.MaxValue;
+        else
+            upperLimit = int.Parse(upperLimitInput);
+
+        Console.WriteLine("Генерація чисел Фібоначчі...");
+
+        Thread primeThread = new Thread(() => GeneratePrimeNumbers(upperLimit));
+        Thread fibonacciThread = new Thread(() => GenerateFibonacciNumbers(upperLimit));
+
+        primeThread.Start();
+        fibonacciThread.Start();
+    }
+
+    static void GenerateFibonacciNumbers(int upperLimit)
+    {
+        int a = 0;
+        int b = 1;
+        while (a <= upperLimit)
+        {
+            Console.WriteLine(a);
+            int temp = a;
+            a = b;
+            b = temp + b;
+        }
+    }
+
+    static void GeneratePrimeNumbers(int upperLimit)
+    {
+        int number = 2; 
+        while (number <= upperLimit)
+        {
+            if (IsPrime(number))
+                Console.WriteLine(number);
+            number++;
+        }
+    }
+
+    static bool IsPrime(int number)
+    {
+        if (number <= 1)
+            return false;
+
+        for (int i = 2; i <= Math.Sqrt(number); i++)
+        {
+            if (number % i == 0)
+                return false;
+        }
+        return true;
+    }
+}
